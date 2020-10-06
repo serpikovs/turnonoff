@@ -10,7 +10,7 @@ function App() {
     <div className="App">
 
       <div className="mt-5">
-        <AdminView/>
+        <LoginView/>
       </div>
 
 
