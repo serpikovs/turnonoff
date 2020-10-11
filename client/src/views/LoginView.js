@@ -10,9 +10,6 @@ export default function LoginView(props) {
     password: "pass1",
   })
 
-
-  const [hasRendered, setHasRendered] = useState(false)
-
   const [redirectPath,setRedirectPath] = React.useState()
   const [redirectRequest, setRedirectRequest] =  React.useState(false)
 
@@ -32,28 +29,7 @@ export default function LoginView(props) {
         setRedirectRequest(true)
       }
     })
-  }
-
-  useEffect(() => setHasRendered(true), [hasRendered])
-  const token = localStorage.getItem("token")
-  const role = localStorage.getItem("role")
-  if (!hasRendered && token!='') {
-    
-    api.isTokenValid(token).then((res)=>{
-      if (res.status==200) {
-        props.setToken(token)
-        props.setTokenStatus(true)
-
-        if (role === "admin") setRedirectPath("/adminpanel")
-        if (role === "user") setRedirectPath("/userpanel")
-
-
-        setRedirectRequest(true)
-
-      }
-    }
-    )
-  }
+  }  
 
   return (
     <div className="loginView mx-auto mt-3">

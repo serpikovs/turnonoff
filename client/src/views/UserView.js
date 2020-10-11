@@ -14,11 +14,15 @@ export default function UserView(props){
     }
 
     return(
-        <div className="text-left">
-            123
+        <div className="userView mx-auto">
+            <div className="text-left">
             {lampList.map((value,index,arr)=> 
-                 <LampContol key={index} lamp={value}/>
+                 <LampContol 
+                 key={index}
+                 token={props.token} 
+                 lamp={value}/>
             )}
+            </div>
         </div>
     )
 }

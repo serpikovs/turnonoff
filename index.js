@@ -7,6 +7,7 @@ const {addLamp} = require("./api/addLamp")
 const {login} = require("./api/login")
 const authMiddleware = require("./api/auth")
 const {getLampsList} = require("./api/getLampsList")
+const {setLampState} = require("./api/setLampState")
 
 const app = express()
 
@@ -19,7 +20,7 @@ app.get("/", (req, res) => {
 app
   .route("/getUsers")
   .get((req, res) => {})
-  .post(getUsers)
+  .post(authMiddleware,getUsers)
 
   app
   .route("/getLampModels")
@@ -37,14 +38,9 @@ app
   .post(authMiddleware,addLamp)
 
 app
-  .route("/onLamp")
+  .route("/setLampState")
   .get((req, res) => {})
-  .post((req, res) => {})
-
-app
-  .route("/offLamp")
-  .get((req, res) => {})
-  .post((req, res) => {})
+  .post(authMiddleware,setLampState)
 
   app
   .route("/login")

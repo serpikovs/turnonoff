@@ -6,8 +6,7 @@ const mySqlConnection = mysql.createConnection({
   user: "root",
   database: "lamponoff",
   password: secret.mySqlPassword,
-  charset: 'utf8'
-  
+  charset: "utf8",
 })
 
 const database = {
@@ -23,17 +22,18 @@ const database = {
   getUserByName(name) {
     return mySqlConnection
       .then((connection) =>
-        connection.execute("SELECT * FROM `users` WHERE `name`= ? ", [name || ''])
+        connection.execute("SELECT * FROM users WHERE name= ? ", [name || ""])
       )
-      .then((data) =>
-        data[0].map((row) => {
-          return {
-            id: row.id,
-            name: row.name,
-            password: row.password,
-            role: row.role,
-          }
-        })[0]
+      .then(
+        (data) =>
+          data[0].map((row) => {
+            return {
+              id: row.id,
+              name: row.name,
+              password: row.password,
+              role: row.role,
+            }
+          })[0]
       )
   },
 
@@ -47,27 +47,51 @@ const database = {
       )
   },
 
-  getLampsList() {
+  getLampsList(owner) {
+
+    console.log(owner)
     return mySqlConnection
-      .then((connection) => connection.execute("SELECT * FROM lamps"))
-      .then((data) =>
-        data[0].map((row) => {
-          return { model: row.model, adress: row. adress, owner: row.owner, state: row.state }
+      .then(
+        (connection) =>
+          connection.execute("SELECT * FROM lamps WHERE owner = ?",
+          [owner])
+      )
+      .then((data) => data[0].map((row) => {
+          return {
+            model: row.model,
+            adress: row.adress,
+            owner: row.owner,
+            state: row.state,
+          }
         })
       )
   },
 
   addLamp(newLamp) {
-  console.log([newLamp.model,newLamp.adress, newLamp.owner, typeof newLamp.defaultState])
-
     return mySqlConnection
-    .then((connection)=> connection.execute(
-      "REPLACE INTO lamps (model,adress,owner,state) VALUES ( ? , ? , ? , ?)",
-    [newLamp.model,newLamp.adress, newLamp.owner, newLamp.defaultState],
-    (err,result,fields)=>{}
-    ))
-    .then((result)=>console.log(result))
-    .catch((e)=>console.log(e))
+      .then((connection) =>
+        connection.execute(
+          "REPLACE INTO lamps (model,adress,owner,state) VALUES ( ? , ? , ? , ?)",
+          [newLamp.model, newLamp.adress, newLamp.owner, newLamp.defaultState],
+          (err, result, fields) => {}
+        )
+      )
+      .then((result) => console.log(result))
+      .catch((e) => console.log(e))
+  },
+
+  setLampState(adress, state){
+    console.log(adress,state)
+    return mySqlConnection
+    .then((connection) =>
+      connection.execute(
+        "UPDATE lamps SET state=? WHERE adress=?",
+        [ state, adress],
+        (err, result, fields) => {console.log(fields)}
+      )
+    )
+    .then((result) => console.log(result))
+    .catch((e) => console.log(e))
   }
 }
 
