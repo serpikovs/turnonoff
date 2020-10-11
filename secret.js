@@ -1,5 +1,6 @@
 const secret = {
-    mySqlPassword: 'ServerMySql'
+    mySqlPassword: 'ServerMySql',
+    jwtSecret: 'jwtSecretWord'
 }
 
 module.exports = secret

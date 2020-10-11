@@ -1,4 +1,4 @@
-import React from "react"
+import React,{ useState, useEffect } from "react"
 import {
   DropdownButton,
   Dropdown,
@@ -7,45 +7,49 @@ import {
   Button,
   Form,
 } from "react-bootstrap"
-import Communication from '../api/communication'
+import { api } from "../api"
 
-export default function AdminView() {
-  const models = Communication.getLampModels()
-  const users = Communication.getUsers()
+export default function AdminView(props) {
+  const [hasRendered, setHasRendered] = useState(false)
 
-  const [choosenLampModel, setChoosenLampModel] = React.useState("")
-  const [lampAdress, setLampAdress] = React.useState("")
-  const [owner, setOwner] = React.useState()
+  const [models, setModels] = React.useState([])
+  const [users, setUsers] = React.useState([])
 
+  const [newLamp, setNewLamp] = React.useState({model:'',adress:'',owner:'',defaultState:false})
 
-  function assignUser() {
-    console.log(choosenLampModel)
-    console.log(lampAdress)
-    console.log(owner)
+  function saveLamp() {
+    api.addLamp(props.token,newLamp)
   }
 
+  useEffect(() => setHasRendered(true), [hasRendered])
+  if (!hasRendered) {
+    api.getLampModels(props.token).then((res) => setModels(res.models))
+    api.getUsers(props.token).then((res) => setUsers(res.users))
+  }
 
   return (
     <div className="adminView mx-auto ">
       <div className="card1">
         <InputGroup className="mb-3">
           <DropdownButton
-            as={InputGroup.Prepend}
             variant="outline-secondary"
             title="Выберите модель"
             id="input-group-dropdown-1"
             onSelect={(e) => {
-              setChoosenLampModel(e)
+              //setChoosenLampModel(e)
+              setNewLamp({...newLamp, model: e})
             }}
           >
-            <Dropdown.Item eventKey={models[0]}>{models[0]}</Dropdown.Item>
-            <Dropdown.Item eventKey={models[1]}>{models[1]}</Dropdown.Item>
-            <Dropdown.Item eventKey={models[2]}>{models[2]}</Dropdown.Item>
+            {models.map((model) => (
+              <Dropdown.Item eventKey={model.name} key={model.id}>
+                {model.name}
+              </Dropdown.Item>
+            ))}
           </DropdownButton>
           <FormControl
             aria-describedby="basic-addon1"
-            value={choosenLampModel}
-            onChange={(e) => setChoosenLampModel(e.target.value)}
+            value={newLamp.model}
+            onChange={(e) => setNewLamp({...newLamp, model: e.target.value})}
           />
         </InputGroup>
 
@@ -53,42 +57,47 @@ export default function AdminView() {
           <InputGroup.Prepend>
             <InputGroup.Text id="basic-addon3">Адрес:</InputGroup.Text>
           </InputGroup.Prepend>
-          <FormControl id="basic-url" aria-describedby="basic-addon3" 
-          onChange={(e)=>setLampAdress(e.target.value)}/>
+          <FormControl
+            id="basic-url"
+            aria-describedby="basic-addon3"
+            onChange={(e) => setNewLamp({...newLamp, adress: e.target.value})}
+          />
         </InputGroup>
 
         <div className="text-left">Назначить пользователю:</div>
-        
+
         <div className="d-flex flex-row">
           <Form.Group controlId="exampleForm.ControlSelect1">
             <Form.Control
               as="select"
-              onChange={(e) => setOwner({ ...owner, key: e.target.value })}
+              onChange={(e) => setNewLamp({ ...newLamp, owner: e.target.value })}
             >
               <option></option>
-              <option>{users[0]}</option>
-              <option>{users[1]}</option>
-              <option>{users[2]}</option>
+              {users.map((user) => (
+                <option key={user.id}>{user.name}</option>
+              ))}
             </Form.Control>
           </Form.Group>
 
-          <Form.Group className='align-self-center px-3' controlId="formBasicCheckbox">
+          <Form.Group
+            className="align-self-center px-3"
+            controlId="formBasicCheckbox"
+          >
             <Form.Check
               type="checkbox"
               label="Вкл. по умолчанию"
               onChange={(e) =>
-                setOwner({ ...owner, defaultState: e.target.checked })
+                setNewLamp({ ...newLamp, defaultState: e.target.checked })
               }
             />
           </Form.Group>
           <div className="ml-auto">
-            <Button variant="primary" onClick={() => assignUser()}>
+            <Button variant="primary" onClick={() => saveLamp()}>
               Сохранить
             </Button>
           </div>
         </div>
       </div>
-
     </div>
   )
 }

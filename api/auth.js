@@ -1,16 +1,24 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const database = require('./database')
+const jwt = require("jsonwebtoken")
+const secret = require("../secret")
 
-const signIn = (req, res) => {
-    const {name, password } = req.body
+module.exports = (req, res, next) => {
+  const authHeader = req.get("Authorization")
+  if (!authHeader) {
+    res.status(401).json({ message: "There is no token" })
+  }
+  const token = authHeader
 
-    database.getUserByName(name).then((user)=>{
-        const isValid = bcrypt.compareSync(password,user.password)
-
-    console.log( password,user.password)
+  console.log(token)
+  try {
+    if (jwt.verify(token, secret.jwtSecret)) {
+      console.log('validation ok!')
+      next()
     }
-    )
+    
+  } catch (e) {
+    if (e instanceof jwt.JsonWebTokenError) {
+      //res.redirect(401,"")
+      res.status(401).json({ message: e })
+    }
+  }
 }
-
-module.exports = { signIn}
