@@ -1,13 +1,13 @@
 const express = require("express")
 const path = require("path")
-const {database} = require("./api/database")
-const {getLampModels} = require("./api/getLampModels")
-const {getUsers} = require("./api/getUsers")
-const {addLamp} = require("./api/addLamp")
-const {login} = require("./api/login")
+const { database } = require("./api/database")
+const { getLampModels } = require("./api/getLampModels")
+const { getUsers } = require("./api/getUsers")
+const { addLamp } = require("./api/addLamp")
+const { login } = require("./api/login")
 const authMiddleware = require("./api/auth")
-const {getLampsList} = require("./api/getLampsList")
-const {setLampState} = require("./api/setLampState")
+const { getLampsList } = require("./api/getLampsList")
+const { setLampState } = require("./api/setLampState")
 
 const app = express()
 
@@ -20,37 +20,36 @@ app.get("/", (req, res) => {
 app
   .route("/getUsers")
   .get((req, res) => {})
-  .post(authMiddleware,getUsers)
-
-  app
-  .route("/getLampModels")
-  .get((req, res) => {})
-  .post(authMiddleware,getLampModels)
+  .post(authMiddleware, getUsers)
 
 app
-.route("/getLampsList")
-.get((req, res) => {})
-.post(authMiddleware,getLampsList)
+  .route("/getLampModels")
+  .get((req, res) => {})
+  .post(authMiddleware, getLampModels)
+
+app
+  .route("/getLampsList")
+  .get((req, res) => {})
+  .post(authMiddleware, getLampsList)
 
 app
   .route("/addLamp")
   .get((req, res) => {})
-  .post(authMiddleware,addLamp)
+  .post(authMiddleware, addLamp)
 
 app
   .route("/setLampState")
   .get((req, res) => {})
-  .post(authMiddleware,setLampState)
+  .post(authMiddleware, setLampState)
 
-  app
+app
   .route("/login")
   .get((req, res) => {})
-  .post(login)  
-  
-  app
+  .post(login)
+
+app
   .route("/auth")
   .get((req, res) => {})
-  .post(authMiddleware, (req,res)=>res.status(200).json("ok!"))
-
+  .post(authMiddleware, (req, res) => res.status(200).json("ok!"))
 
 app.listen(80)

@@ -9,10 +9,10 @@ const getLampsList = (req, res) => {
   }
   const token = authHeader
 
-  const owner = jwt.verify(token,secret.jwtSecret).name
+  const owner = jwt.verify(token, secret.jwtSecret).name
 
   database.getLampsList(owner).then((models) => {
-    res.status(200).json( models )
+    res.status(200).json(models)
   })
 }
 

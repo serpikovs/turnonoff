@@ -30,7 +30,6 @@ function App(props) {
         break
     }
 
-    console.log("!" + role + " " + expectedRole)
     return (
       <Route
         {...rest}

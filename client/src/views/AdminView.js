@@ -1,4 +1,4 @@
-import React,{ useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import {
   DropdownButton,
   Dropdown,
@@ -15,10 +15,15 @@ export default function AdminView(props) {
   const [models, setModels] = React.useState([])
   const [users, setUsers] = React.useState([])
 
-  const [newLamp, setNewLamp] = React.useState({model:'',adress:'',owner:'',defaultState:false})
+  const [newLamp, setNewLamp] = React.useState({
+    model: "",
+    adress: "",
+    owner: "",
+    defaultState: false,
+  })
 
   function saveLamp() {
-    api.addLamp(props.token,newLamp)
+    api.addLamp(props.token, newLamp)
   }
 
   useEffect(() => setHasRendered(true), [hasRendered])
@@ -37,7 +42,7 @@ export default function AdminView(props) {
             id="input-group-dropdown-1"
             onSelect={(e) => {
               //setChoosenLampModel(e)
-              setNewLamp({...newLamp, model: e})
+              setNewLamp({ ...newLamp, model: e })
             }}
           >
             {models.map((model) => (
@@ -49,7 +54,7 @@ export default function AdminView(props) {
           <FormControl
             aria-describedby="basic-addon1"
             value={newLamp.model}
-            onChange={(e) => setNewLamp({...newLamp, model: e.target.value})}
+            onChange={(e) => setNewLamp({ ...newLamp, model: e.target.value })}
           />
         </InputGroup>
 
@@ -60,7 +65,7 @@ export default function AdminView(props) {
           <FormControl
             id="basic-url"
             aria-describedby="basic-addon3"
-            onChange={(e) => setNewLamp({...newLamp, adress: e.target.value})}
+            onChange={(e) => setNewLamp({ ...newLamp, adress: e.target.value })}
           />
         </InputGroup>
 
@@ -70,7 +75,9 @@ export default function AdminView(props) {
           <Form.Group controlId="exampleForm.ControlSelect1">
             <Form.Control
               as="select"
-              onChange={(e) => setNewLamp({ ...newLamp, owner: e.target.value })}
+              onChange={(e) =>
+                setNewLamp({ ...newLamp, owner: e.target.value })
+              }
             >
               <option></option>
               {users.map((user) => (

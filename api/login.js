@@ -1,10 +1,10 @@
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const {database} = require("./database")
+const { database } = require("./database")
 const secret = require("../secret")
 
 const login = (req, res) => {
-  const tokenLifeTimeSec = 600  
+  const tokenLifeTimeSec = 600
   const { name, password } = req.body
 
   database
@@ -15,7 +15,7 @@ const login = (req, res) => {
 
       if (isValid) {
         const token = jwt.sign(
-          { name: name, exp: Math.floor(Date.now() / 1000) + tokenLifeTimeSec  },
+          { name: name, exp: Math.floor(Date.now() / 1000) + tokenLifeTimeSec },
           secret.jwtSecret
         )
         res.status(200).json({ token, role })

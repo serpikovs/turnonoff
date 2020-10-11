@@ -48,15 +48,12 @@ const database = {
   },
 
   getLampsList(owner) {
-
-    console.log(owner)
     return mySqlConnection
-      .then(
-        (connection) =>
-          connection.execute("SELECT * FROM lamps WHERE owner = ?",
-          [owner])
+      .then((connection) =>
+        connection.execute("SELECT * FROM lamps WHERE owner = ?", [owner])
       )
-      .then((data) => data[0].map((row) => {
+      .then((data) =>
+        data[0].map((row) => {
           return {
             model: row.model,
             adress: row.adress,
@@ -76,23 +73,23 @@ const database = {
           (err, result, fields) => {}
         )
       )
-      .then((result) => console.log(result))
       .catch((e) => console.log(e))
   },
 
-  setLampState(adress, state){
-    console.log(adress,state)
+  setLampState(adress, state) {
     return mySqlConnection
-    .then((connection) =>
-      connection.execute(
-        "UPDATE lamps SET state=? WHERE adress=?",
-        [ state, adress],
-        (err, result, fields) => {console.log(fields)}
+      .then((connection) =>
+        connection.execute(
+          "UPDATE lamps SET state=? WHERE adress=?",
+          [state, adress],
+          (err, result, fields) => {
+            console.log(fields)
+          }
+        )
       )
-    )
-    .then((result) => console.log(result))
-    .catch((e) => console.log(e))
-  }
+      .then((result) => console.log(result))
+      .catch((e) => console.log(e))
+  },
 }
 
 module.exports = { database }

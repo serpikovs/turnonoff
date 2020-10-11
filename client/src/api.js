@@ -16,7 +16,6 @@ export const api = {
     }).then((res) => res.json())
   },
 
-
   setLampState(token, adress, state) {
     return fetch("/setLampState", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -29,7 +28,7 @@ export const api = {
       },
       redirect: "follow", // manual, *follow, error
       referrerPolicy: "no-referrer", // no-referrer, *client
-      body: JSON.stringify({adress,state})
+      body: JSON.stringify({ adress, state }),
     }).then((res) => res.json())
   },
 

@@ -7,15 +7,12 @@ module.exports = (req, res, next) => {
     res.status(401).json({ message: "There is no token" })
   }
   const token = authHeader
- 
-  
-  console.log(token)
+
   try {
     if (jwt.verify(token, secret.jwtSecret)) {
-      console.log('validation ok!')
+      console.log("validation ok!")
       next()
     }
-    
   } catch (e) {
     if (e instanceof jwt.JsonWebTokenError) {
       //res.redirect(401,"")
