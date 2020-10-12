@@ -39,3 +39,5 @@ API сервера условно разделено на две части - о
 
 ![Alt text](/screens/lampsTable.png)
 
+Дамп базы данных находится тут ![Alt text](/db/Dump20201012.sql)
+
